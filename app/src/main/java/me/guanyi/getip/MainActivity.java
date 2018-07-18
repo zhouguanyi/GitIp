@@ -21,7 +21,6 @@ import java.net.SocketException;
 import java.util.Enumeration;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String TAG = "MainActivity";
 
     private Button mBtn;
     private TextView mTxt;
