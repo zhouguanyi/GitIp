@@ -9,7 +9,10 @@ import android.net.wifi.WifiManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.net.Inet4Address;
 import java.net.InetAddress;
@@ -20,26 +23,47 @@ import java.util.Enumeration;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
+    private Button mBtn;
+    private TextView mTxt;
+
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        TextView textView = findViewById(R.id.id_ip);
+        mTxt = findViewById(R.id.id_ip);
+        mBtn = findViewById(R.id.id_btn);
 
-        if (getAPNType(MainActivity.this) == 1){
 
-            WifiManager wifiManager= (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
-            WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-            System.out.println("wifi信息："+wifiInfo.toString());
-            System.out.println("wifi名称："+wifiInfo.getSSID());
-            textView.setText(wifiInfo.getSSID() + "\n" + getPhoneIp());
-
-        }else {
-            textView.setText("未连接 WIFI");
-        }
+        addListener(MainActivity.this);
+        upDataUI(MainActivity.this);
 
     }
+
+    private void addListener(final Context context){
+        mBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                upDataUI(context);
+                Toast.makeText(context,"刷新完成",Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void upDataUI(Context context){
+        if (getAPNType(context) == 1){
+            WifiManager wifiManager= (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+            WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+            //System.out.println("wifi信息："+wifiInfo.toString());
+            //System.out.println("wifi名称："+wifiInfo.getSSID());
+            mTxt.setText(wifiInfo.getSSID() + "\n" + "\n" + getPhoneIp());
+
+        }else {
+            mTxt.setText("未连接 WIFI");
+        }
+    }
+
+
 
     /**
      * 获取当前的网络状态 ：没有网络0：WIFI网络1：3G网络2：2G网络3
@@ -74,6 +98,11 @@ public class MainActivity extends AppCompatActivity {
         return netType;
     }
 
+
+    /**
+     * getPhoneIp 获取ip地址
+     * @return
+     */
     public static String getPhoneIp() {
         try {
             for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
