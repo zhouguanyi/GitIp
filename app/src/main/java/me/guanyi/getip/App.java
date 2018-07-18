@@ -8,7 +8,7 @@ import android.app.Application;
  */
 
 public class App extends Application {
-    private static final String TAG = "App";
+    private static final String TAG = "GitIp App";
 
 
     @Override
