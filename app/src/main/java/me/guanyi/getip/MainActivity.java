@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
@@ -26,11 +28,13 @@ public class MainActivity extends AppCompatActivity {
         TextView textView = findViewById(R.id.id_ip);
 
         if (getAPNType(MainActivity.this) == 1){
-            try {
-                textView.setText(getPhoneIp());
-            } catch (SocketException e) {
-                e.printStackTrace();
-            }
+
+            WifiManager wifiManager= (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+            WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+            System.out.println("wifi信息："+wifiInfo.toString());
+            System.out.println("wifi名称："+wifiInfo.getSSID());
+            textView.setText(wifiInfo.getSSID() + "\n" + getPhoneIp());
+
         }else {
             textView.setText("未连接 WIFI");
         }
@@ -70,15 +74,19 @@ public class MainActivity extends AppCompatActivity {
         return netType;
     }
 
-    public static String getPhoneIp() throws SocketException {
-        for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
-            NetworkInterface intf = en.nextElement();
-            for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
-                InetAddress inetAddress = enumIpAddr.nextElement();
-                if (!inetAddress.isLoopbackAddress() && inetAddress instanceof Inet4Address) {
-                    return inetAddress.getHostAddress();
+    public static String getPhoneIp() {
+        try {
+            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
+                NetworkInterface intf = en.nextElement();
+                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
+                    InetAddress inetAddress = enumIpAddr.nextElement();
+                    if (!inetAddress.isLoopbackAddress() && inetAddress instanceof Inet4Address) {
+                        return inetAddress.getHostAddress();
+                    }
                 }
             }
+        } catch (SocketException e) {
+            e.printStackTrace();
         }
         return "没有获取到 IP";
     }
