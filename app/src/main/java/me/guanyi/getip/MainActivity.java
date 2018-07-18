@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
-        return "error";
+        return "没有获取到 IP";
     }
 
 }
