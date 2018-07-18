@@ -16,6 +16,7 @@ import java.net.SocketException;
 import java.util.Enumeration;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = "MainActivity";
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -31,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }else {
-            textView.setText("未连接WIFI");
+            textView.setText("未连接 WIFI");
         }
 
     }
