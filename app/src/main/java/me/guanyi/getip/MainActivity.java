@@ -17,13 +17,12 @@ import java.util.Enumeration;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView textView;
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        textView = findViewById(R.id.id_ip);
+        TextView textView = findViewById(R.id.id_ip);
 
         if (getAPNType(MainActivity.this) == 1){
             try {
@@ -47,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         int netType = 0;
         ConnectivityManager connMgr = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
+        assert connMgr != null;
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo == null) {
             return netType;
@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
             int nSubType = networkInfo.getSubtype();
             TelephonyManager mTelephony = (TelephonyManager) context
                     .getSystemService(Context.TELEPHONY_SERVICE);
+            assert mTelephony != null;
             if (nSubType == TelephonyManager.NETWORK_TYPE_UMTS
                     && !mTelephony.isNetworkRoaming()) {
                 netType = 2;// 3G
@@ -74,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
             for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
                 InetAddress inetAddress = enumIpAddr.nextElement();
                 if (!inetAddress.isLoopbackAddress() && inetAddress instanceof Inet4Address) {
-                    return inetAddress.getHostAddress().toString();
+                    return inetAddress.getHostAddress();
                 }
             }
         }
