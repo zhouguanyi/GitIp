@@ -1,5 +1,6 @@
 package me.guanyi.getip;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -14,11 +15,15 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.PermissionUtils;
+
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -51,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void upDataUI(Context context){
+
+        getPermission(Manifest.permission.ACCESS_WIFI_STATE);
+
         if (getAPNType(context) == 1){
             WifiManager wifiManager= (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
             WifiInfo wifiInfo = wifiManager.getConnectionInfo();
@@ -118,6 +126,40 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return "没有获取到 IP";
+    }
+
+    /**
+     * 获取系统权限
+     * getPermission
+     * @param permission
+     */
+    public static void getPermission(String permission){
+        if(!PermissionUtils.isGranted(permission)){
+            PermissionUtils.permission(permission)
+                    .rationale(new PermissionUtils.OnRationaleListener() {
+                        @Override
+                        public void rationale(final ShouldRequest shouldRequest) {
+                            PermissionDialogHelper.showRationaleDialog(shouldRequest);
+                        }
+                    })
+                    .callback(new PermissionUtils.FullCallback() {
+                        @Override
+                        public void onGranted(List<String> permissionsGranted) {
+                            //updateAboutPermission();
+                            LogUtils.d(permissionsGranted);
+                        }
+
+                        @Override
+                        public void onDenied(List<String> permissionsDeniedForever,
+                                             List<String> permissionsDenied) {
+                            if (!permissionsDeniedForever.isEmpty()) {
+                                PermissionDialogHelper.showOpenAppSettingDialog();
+                            }
+                            LogUtils.d(permissionsDeniedForever, permissionsDenied);
+                        }
+                    })
+                    .request();
+        }
     }
 
 }
