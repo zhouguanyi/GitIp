@@ -26,7 +26,6 @@ import java.util.Enumeration;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String TAG = "MainActivity";
 
     private Button mBtn;
     private TextView mTxt;
