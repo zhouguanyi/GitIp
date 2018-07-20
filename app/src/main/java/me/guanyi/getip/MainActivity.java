@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         addListener(MainActivity.this);
         upDataUI(MainActivity.this);
 
-        Log.e(TAG, "onCreate: 2" );
+        Log.e(TAG, "onCreate: 3" );
     }
 
     private void addListener(final Context context){
