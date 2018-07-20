@@ -61,8 +61,8 @@ public class MainActivity extends AppCompatActivity {
         if (getAPNType(context) == 1){
             WifiManager wifiManager= (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
             WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-            System.out.println("wifi信息："+wifiInfo.toString());
-            System.out.println("wifi名称："+wifiInfo.getSSID());
+            System.out.println("wifi信息==="+wifiInfo.toString());
+            System.out.println("wifi名称===="+wifiInfo.getSSID());
             mTxt.setText(wifiInfo.getSSID() + "\n" + "\n" + getPhoneIp());
 
         }else {
