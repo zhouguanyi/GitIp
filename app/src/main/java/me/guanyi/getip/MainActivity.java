@@ -10,6 +10,7 @@ import android.net.wifi.WifiManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -26,6 +27,7 @@ import java.util.Enumeration;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = "MainActivity master";
 
     private Button mBtn;
     private TextView mTxt;
@@ -42,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         addListener(MainActivity.this);
         upDataUI(MainActivity.this);
 
+        Log.e(TAG, "onCreate: 2" );
     }
 
     private void addListener(final Context context){
@@ -54,16 +57,20 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @SuppressLint("SetTextI18n")
     private void upDataUI(Context context){
 
         getPermission(Manifest.permission.ACCESS_WIFI_STATE);
 
         if (getAPNType(context) == 1){
-            WifiManager wifiManager= (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+            @SuppressLint("WifiManagerPotentialLeak")
+            WifiManager wifiManager= (WifiManager) context.getSystemService(WIFI_SERVICE);
             WifiInfo wifiInfo = wifiManager.getConnectionInfo();
             System.out.println("wifi信息==="+wifiInfo.toString());
             System.out.println("wifi名称===="+wifiInfo.getSSID());
             mTxt.setText(wifiInfo.getSSID() + "\n" + "\n" + getPhoneIp());
+
+
 
         }else {
             mTxt.setText("未连接 WIFI");
