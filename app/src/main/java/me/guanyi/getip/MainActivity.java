@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
         Log.e(TAG, "onCreate: 3" );
         Log.e(TAG, "onCreate: 33" );
+        Log.e(TAG, "onCreate: 4" );
     }
 
     private void addListener(final Context context){
